@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>System Data</title>
+
+  <style>
+    canvas {
+      width: 400px;
+      height: 300px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Smart Farm</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th colspan="4">Sistem Penyiraman Tanaman</th>
+      </tr>
+      <tr>
+        <th>Sensor Kelembapan Tanah (%)</th>
+        <th>Sensor Suhu (C)</th>
+        <th>Sensor Cahaya (Lux)</th>
+        <th>Sprinkler (ml/s)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span id="moist"></span> %</td>
+        <td><span id="temp"></span> &#176;C</td>
+        <td><span id="light"></span> Lux</td>
+        <td><span id="actuator1"></span></td>
+      </tr>
+      <tr>
+        <td><canvas id="sensorChart1"></canvas></td>
+        <td><canvas id="sensorChart2"></canvas></td>
+        <td><canvas id="sensorChart3"></canvas></td>
+        <td><canvas id="actuatorChart"></canvas></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      // Initialize charts
+      var sensorChart1 = new Chart(document.getElementById("sensorChart1"), {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: "Sensor 1",
+            data: [],
+            borderColor: "#3e95cd",
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'Sensor 1 Data'
+          },
+          scales: {
+            xAxes: [{
+              display: true
+            }],
+            yAxes: [{
+              display: true,
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: 100
+              }
+            }]
+          }
+        }
+      });
+
+      var sensorChart2 = new Chart(document.getElementById("sensorChart2"), {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: "Sensor 2",
+            data: [],
+            borderColor: "#3e95cd",
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'Sensor 2 Data'
+          },
+          scales: {
+            xAxes: [{
+              display: true
+            }],
+            yAxes: [{
+              display: true,
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: 100
+              }
+            }]
+          }
+        }
+      });
+
+      var sensorChart3 = new Chart(document.getElementById("sensorChart3"), {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: "Sensor 3",
+            data: [],
+            borderColor: "#3e95cd",
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'Sensor 3 Data'
+          },
+          scales: {
+            xAxes: [{
+              display: true
+            }],
+            yAxes: [{
+              display: true,
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: 100
+              }
+            }]
+          }
+        }
+      });
+
+      var actuatorChart = new Chart(document.getElementById("actuatorChart"), {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: "Actuator",
+            data: [],
+            borderColor: "#3e95cd",
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'Actuator Data'
+          },
+          scales: {
+            xAxes: [{
+              display: true
+            }],
+            yAxes: [{
+              display: true,
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: 100
+              }
+            }]
+          }
+        }
+      });
+
+      // Function to update sensor value
+      function updateSensorValue(endpoint, id) {
+        $.ajax({
+          method: "GET",
+          url: endpoint,
+          success: function(data) {
+            var value = document.getElementById(id);
+            value.innerHTML = data.value;
+          },
+          error: function(error_data) {
+            console.log(error_data);
+          }
+        });
+      }
+
+      // Function to update sensor chart
+      function updateSensorChart(endpoint, chart) {
+        $.ajax({
+          method: "GET",
+          url: endpoint,
+          success: function(data) {
+            chart.data.labels.push(new Date().toLocaleTimeString());
+            chart.data.datasets[0].data.push(data.value);
+
+            // Remove old data if it exceeds 7
+            if (chart.data.labels.length > 7) {
+              chart.data.labels.shift();
+              chart.data.datasets[0].data.shift();
+            }
+
+            chart.update();
+          },
+          error: function(error_data) {
+            console.log(error_data);
+          }
+        });
+      }
+
+      // Function to update actuator chart
+      function updateActuatorChart(endpoint, chart) {
+        $.ajax({
+          method: "GET",
+          url: endpoint,
+          success: function(data) {
+            chart.data.labels.push(new Date().toLocaleTimeString());
+            chart.data.datasets[0].data.push(data.state);
+
+            // Remove old data if it exceeds 7
+            if (chart.data.labels.length > 7) {
+              chart.data.labels.shift();
+              chart.data.datasets[0].data.shift();
+            }
+
+            chart.update();
+          },
+          error: function(error_data) {
+            console.log(error_data);
+          }
+        });
+      }
+
+      // Function to update actuator state
+      function updateActuatorState(endpoint, id) {
+        $.ajax({
+          method: "GET",
+          url: endpoint,
+          success: function(data) {
+            var state = document.getElementById(id);
+            state.innerHTML = data.state;
+          },
+          error: function(error_data) {
+            console.log(error_data);
+          }
+        });
+      }
+
+      // Update values and charts at intervals
+      setInterval(function() {
+        // Smart Farm
+        updateSensorValue('/sfarm/moisture', 'moist');
+        updateSensorChart('/sfarm/moisture', sensorChart1);
+        updateSensorValue('/sfarm/temp', 'temp');
+        updateSensorChart('/sfarm/temp', sensorChart2);
+        updateSensorValue('/sfarm/light', 'light');
+        updateSensorChart('/sfarm/light', sensorChart3);
+        updateActuatorState('/actuator/actuator1', 'actuator1');
+        updateActuatorChart('/actuator/actuator1', actuatorChart);
+      }, 1000);
+    });
+  </script>
+
+</body>
+
+</html>
