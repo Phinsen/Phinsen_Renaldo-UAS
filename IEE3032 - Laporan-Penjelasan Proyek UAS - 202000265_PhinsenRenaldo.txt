@@ -1,0 +1,20 @@
+Tautan GitHub: https://github.com/Phinsen/Phinsen_Renaldo-UAS
+Tautan G-Drive: https://drive.google.com/drive/folders/1W0cGD_hrkJAgo49y--FDzLkjCR3Rd2bm?usp=sharing
+
+Penjelasan masing-masing sensor:
+
+- Sensor Kelembapan Tanah:
+	Sensor ini mengukur kelembapan atau kandungan cairan dalam tanah. Pengukuran ini dilakukan dalam persen (%). Sensornya sendiri dapat mengukur dari 0% - 100% (namun nilai-nilai 0% dan 100% misalnya tidak bisa dicapai karena 0% artinya benar-benar kering tanpa kandungan air sama sekali dan 100% artinya hanya terdapat air, yang tidak mungkin terjadi di kasus kita). Kandungan cairan dalam tanah yang disimulasikan sendiri adalah 10%-75%. Ini melambangkan kondisi tanah dari yang kering sekali hingga sangat lembap.  Kondisi kelembapan yang dikatakan baik untuk tanaman adalah 25-50%.
+
+- Sensor Temperatur:
+	Sensor ini mengukur suhu ruangan di sekitar tanaman. Sensor ini mengukur dalam satuan celcius (C) dan berada pada rentang 0 - 50C. Akan tetapi simulasi sendiri hanya menghasilkan suhu 20 - 40C karena ini menggambarkan kurang lebih kondisi suhu terdingin dan terpanas yang wajar pada negara iklim tropis (misal kasus kita, Indonesia). Kondisi suhu yang baik dikategorikan ketika suhu sekitar 20 - 30C untuk tanaman bisa tumbuh optimal.
+
+- Sensor Cahaya:
+	Sensor ini mengukur intensitas cahaya yang diterima tanaman. Sensor ini mengukur dalam satuan Lux dan berada pada rentang pengukuran 0 - 10.000 Lux. Akan tetapi simulasi sendiri hanya menghasilkan nilai 500-7000 Lux, karena ini merupakan pencahayaan yang wajar dalam kondisi dari malam hingga pagi hari.
+
+- Aktuator: Sprinkler
+	Aktuator yang diguankakn adalah sprinkler. Sprinkler akan dinyalakan dengan debit air yang disesuaikan kondisi. Kondisi tanah kering, temperatur tinggi, dan intensitas cahaya tinggi akan meningkatkan debit air sprinkler serta begitu juga sebaliknya. Besaran debit air ini disesuaikan dengan hasil ML dari data set yang telah disediakan.
+
+"Di hadapan TUHAN yang hidup, saya menegaskan bahwa saya tidak memberikan maupun menerima bantuan apapun--baik lisan, tulisan, maupun elektronik--di dalam ujian ini selaind aripada apa yang telah diizinkan oleh pengajar dan tidak akan menyebarkan baik soal maupun jawaban kepada pihak lain."
+
+												Phinsen Renaldo
